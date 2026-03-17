@@ -1,27 +1,59 @@
-
 trigger:
-- master
+  branches:
+    include:
+      - main
+
+pr: none
 
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
-- task: UseDotNet@2
-  inputs:
-    packageType: sdk
-    version: '9.0.x'
+variables:
+  buildConfiguration: 'Release'
+  imageRepository: 'chinni232/helloworld-api'
+  dockerRegistryServiceConnection: 'dockerhub-service-connection'
+  imageTag: '$(Build.BuildId)'
 
-- script: dotnet restore
-  displayName: Restore
+stages:
+- stage: Build_Test
+  displayName: Build and Test
+  jobs:
+  - job: BuildTest
+    displayName: Restore Build Test
+    steps:
+    - task: UseDotNet@2
+      displayName: Install .NET 9 SDK
+      inputs:
+        packageType: 'sdk'
+        version: '9.0.x'
 
-- script: dotnet build --configuration Release
-  displayName: Build
+    - script: dotnet restore src/HelloWorld.Api/HelloWorld.Api.csproj
+      displayName: Restore API
 
-- script: dotnet test
-  displayName: Run Tests
+    - script: dotnet build src/HelloWorld.Api/HelloWorld.Api.csproj --configuration $(buildConfiguration) --no-restore
+      displayName: Build API
 
-- task: Docker@2
-  inputs:
-    command: build
-    Dockerfile: Dockerfile
-    tags: latest
+    - script: dotnet test tests/HelloWorld.UnitTests/HelloWorld.UnitTests.csproj --configuration $(buildConfiguration) --no-build
+      displayName: Run Unit Tests
+
+    - script: dotnet test tests/HelloWorld.IntegrationTests/HelloWorld.IntegrationTests.csproj --configuration $(buildConfiguration) --no-build
+      displayName: Run Integration Tests
+
+- stage: Docker_Build_Push
+  displayName: Docker Build and Push
+  dependsOn: Build_Test
+  condition: succeeded()
+  jobs:
+  - job: DockerBuildPush
+    displayName: Build and Push Docker Image
+    steps:
+    - task: Docker@2
+      displayName: Build and Push Image
+      inputs:
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: '$(imageRepository)'
+        command: 'buildAndPush'
+        Dockerfile: 'Dockerfile'
+        tags: |
+          $(imageTag)
+          latest
