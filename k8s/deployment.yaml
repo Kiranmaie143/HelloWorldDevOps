@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: helloworld-api
-        image: 'chinni232/helloworld-api'
-        imagePullPolicy: Never
+        image: chinni232/helloworld-api:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
