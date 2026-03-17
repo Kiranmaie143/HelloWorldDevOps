@@ -1,0 +1,27 @@
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: sdk
+    version: '9.0.x'
+
+- script: dotnet restore
+  displayName: Restore
+
+- script: dotnet build --configuration Release
+  displayName: Build
+
+- script: dotnet test
+  displayName: Run Tests
+
+- task: Docker@2
+  inputs:
+    command: build
+    Dockerfile: Dockerfile
+    tags: latest

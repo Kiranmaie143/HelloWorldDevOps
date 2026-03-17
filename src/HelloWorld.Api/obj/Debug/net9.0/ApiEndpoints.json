@@ -1,0 +1,22 @@
+[
+  {
+    "ContainingType": "HelloWorld.Api.Controllers.HelloController",
+    "Method": "Get",
+    "RelativePath": "api/Hello",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HelloWorld.Api.Controllers.HelloController",
+    "Method": "Health",
+    "RelativePath": "api/Hello/health",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]
