@@ -5,6 +5,6 @@ public class GreetingService
 {
     public string GetMessage()
     {
-        return "Hello World from .NET 9";
+        return "Hello from Kubernetes";
     }
 }
