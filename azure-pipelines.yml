@@ -6,9 +6,7 @@ trigger:
 pr: none
 
 pool:
-  name: 'Default'
-  demands:
-    - Agent.Name -equals plv-cis-agent
+  name: 'DevopsDemo'
 
 variables:
   buildConfiguration: 'Release'
