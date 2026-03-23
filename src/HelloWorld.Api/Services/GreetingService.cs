@@ -5,6 +5,6 @@ public class GreetingService
 {
     public string GetMessage()
     {
-        return "Hello from Kubernetes";
+        return "Hello from Demo";
     }
 }
