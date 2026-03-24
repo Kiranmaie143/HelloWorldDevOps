@@ -5,6 +5,6 @@ public class GreetingService
 {
     public string GetMessage()
     {
-        return "Hello from new demo";
+        return "Hello from new second demo";
     }
 }
